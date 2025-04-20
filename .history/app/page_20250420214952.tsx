@@ -11,7 +11,7 @@ const Home = async () => {
         <UserButton />
       </SignedIn>
       <SignedOut>
-        <Button asChild>
+        <Button>
           <SignInButton />
         </Button>
       </SignedOut>

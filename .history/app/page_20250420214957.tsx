@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 
 const Home = async () => {
   const user = await currentUser();
-  console.log(user);
+  // console.log(user);
   return (
     <div className="h-screen flex items-center justify-center">
       <SignedIn>
         <UserButton />
       </SignedIn>
       <SignedOut>
-        <Button asChild>
+        <Button>
           <SignInButton />
         </Button>
       </SignedOut>

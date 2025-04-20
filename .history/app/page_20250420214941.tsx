@@ -1,6 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
 
 const Home = async () => {
   const user = await currentUser();
@@ -11,9 +10,9 @@ const Home = async () => {
         <UserButton />
       </SignedIn>
       <SignedOut>
-        <Button asChild>
+        <div>
           <SignInButton />
-        </Button>
+        </div>
       </SignedOut>
     </div>
   );
