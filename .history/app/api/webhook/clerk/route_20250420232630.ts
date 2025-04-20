@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
+import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
 export async function POST(req: Request) {

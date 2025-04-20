@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
+import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
 export async function POST(req: Request) {
@@ -37,8 +38,9 @@ export async function POST(req: Request) {
         await user.save();
       }
     }
+    return redirect("/profile");
 
-    return new Response("Webhook received", { status: 200 });
+    // return new Response("Webhook received", { status: 200 });
   } catch (err) {
     console.error("Error verifying webhook:", err);
     return new Response("Error verifying webhook", { status: 400 });
