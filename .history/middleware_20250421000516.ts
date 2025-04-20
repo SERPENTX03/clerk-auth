@@ -8,7 +8,7 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    "/((?!_next|.*\\..*|api/webhook/clerk).*)",
+    "/((?!_next|.*\\..*|api/webhook/clerk).*)", // ❗ exclude api/webhook/clerk
     "/(api|trpc)(.*)", // <- อย่าลืมมันรวมหมด
   ],
 };
