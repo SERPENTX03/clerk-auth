@@ -1,6 +1,5 @@
 import User from "@/models/User";
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
-import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
 export async function POST(req: Request) {
@@ -26,19 +25,16 @@ export async function POST(req: Request) {
         return new Response("User already exists", { status: 400 });
       }
 
-      if (!existingUser) {
-        const user = new User({
-          clerkId: id,
-          email,
-          profileImage: image_url,
-          role: "user",
-        });
-        await user.save();
-      }
+      const user = await new User({
+        clerkId: id,
+        email: email_addresses[0].email_address,
+        profileImage: image_url,
+        role: "user",
+      });
+      await user.save();
     }
-    return redirect("/profile");
 
-    // return new Response("Webhook received", { status: 200 });
+    return new Response("Webhook received", { status: 200 });
   } catch (err) {
     console.error("Error verifying webhook:", err);
     return new Response("Error verifying webhook", { status: 400 });

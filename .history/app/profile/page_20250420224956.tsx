@@ -1,13 +1,11 @@
 import { currentUser } from "@clerk/nextjs/server";
 
-import Navbar from "@/components/Navbar";
-const Home = async () => {
+const Profile = async () => {
   const user = await currentUser();
-  console.log(user);
   return (
     <div>
-      <Navbar />
+      <h1>{user?.emailAddresses[0].emailAddress}</h1>
     </div>
   );
 };
-export default Home;
+export default Profile;
