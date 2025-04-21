@@ -1,4 +1,4 @@
-// import { currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 import Navbar from "@/components/Navbar";
 const Home = async () => {
