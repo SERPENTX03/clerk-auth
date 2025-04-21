@@ -56,50 +56,42 @@ export async function POST(req: Request) {
 
     if (eventType === "user.created") {
       const { id, email_addresses, image_url } = evt.data;
-      const email = email_addresses?.[0]?.email_address;
+      const email = email_addresses[0]?.email_address;
 
       if (!email) {
-        return new Response("Email not found in Clerk event data", {
-          status: 400,
-        }); // 400 = Bad Request
+        return new Response("Email not found", { status: 404 });
       }
 
       const existingUser = await User.findOne({ clerkId: id });
 
       if (existingUser) {
-        return new Response("User already exists", { status: 409 }); // 409 = Conflict
+        return new Response("User already exists", { status: 402 });
       }
 
-      try {
-        const user = new User({
-          clerkId: id,
-          email,
-          profileImage: image_url,
-          role: "user",
-        });
+      const user = new User({
+        clerkId: id,
+        email,
+        profileImage: image_url,
+        role: "user",
+      });
+      const newUser = await user.save();
 
-        const newUser = await user.save();
+      const client = await clerkClient();
 
-        const client = await clerkClient();
+      await client.users.updateUserMetadata(id, {
+        publicMetadata: {
+          role: "USER",
+          dbUserId: newUser.id,
+        },
+      });
 
-        await client.users.updateUserMetadata(id, {
-          publicMetadata: {
-            role: "USER",
-            dbUserId: newUser.id,
-          },
-        });
-
-        return NextResponse.json(
-          {
-            message: "User created successfully",
-            userId: newUser.id,
-          },
-          { status: 201 }
-        );
-      } catch (err) {
-        console.error("Error creating user:", err);
-        return new Response("Internal server error", { status: 500 });
-      }
+      return NextResponse.json(
+        {
+          message: "User created successfully",
+          userId: newUser.id,
+        },
+        { status: 201 }
+      );
     }
   } catch (error) {
     console.error("Error processing webhook:", error);
